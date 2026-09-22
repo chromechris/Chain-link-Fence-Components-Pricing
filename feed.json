@@ -1,0 +1,85 @@
+{
+  "asOf": "2026-06-15",
+  "region": "Phoenix, AZ (Maricopa County)",
+  "source": "Seeded from the app's built-in Arizona defaults (Phoenix-area retail and fence-supply list prices, June 2026). Verify with your supplier before bidding.",
+  "settings": {
+    "markup": 0,
+    "tax": 8.6,
+    "note": "Markup is a contractor choice (0 = none). Tax is the Phoenix combined TPT rate (state 5.6% + Maricopa 0.7% + Phoenix 2.3%)."
+  },
+  "fabricRoll": {
+    "4": 130,
+    "5": 160,
+    "6": 190,
+    "8": 280,
+    "10": 360,
+    "12": 440,
+    "note": "Galvanized 9 ga, 2\" mesh, 50' roll, by fence height. Big-box + fence-supply list prices, June 2026."
+  },
+  "fabricMods": {
+    "ga11": 0.82,
+    "ga115": 0.75,
+    "ga6": 1.45,
+    "gaw2": 1.1,
+    "pvc": 1.4,
+    "alum": 1.15,
+    "mesh175": 1.12,
+    "meshSmall": 1.5,
+    "note": "Dimensionless multipliers applied to the base roll price for gauge, coating and mesh size."
+  },
+  "pipeFt": {
+    "p166": 2.4,
+    "p1875": 3,
+    "p19": 3,
+    "p2375": 3.7,
+    "p2875": 5.25,
+    "p4": 9,
+    "p6625": 19,
+    "p8625": 30,
+    "note": "Galvanized SS20/SS40 fence pipe, per lineal foot, by outside diameter. Keys drop the decimal point (p2375 = 2.375\")."
+  },
+  "wire": {
+    "tension": 0.17,
+    "barb": 0.13,
+    "note": "7 ga galvanized tension wire and 12.5 ga 2-pt barbed wire, per lineal foot."
+  },
+  "fit": {
+    "loopcap": 2.75,
+    "domecap": 2.25,
+    "railend": 1.6,
+    "braceband": 1.15,
+    "tband": 0.95,
+    "tbarft": 1.25,
+    "bolt": 0.3,
+    "truss": 12,
+    "sleeve": 3.25,
+    "clamp": 2.5,
+    "tie": 0.06,
+    "hog": 0.05,
+    "barbarm": 4.75,
+    "note": "Galvanized fittings and hardware, each; tbarft is tension bar per lineal foot."
+  },
+  "gate": {
+    "walk": {
+      "4": 150,
+      "5": 175,
+      "6": 210,
+      "7": 265
+    },
+    "dbl": {
+      "12": 560,
+      "16": 700,
+      "20": 860,
+      "24": 1020
+    },
+    "hingepr": 18,
+    "latch": 14,
+    "droprod": 40,
+    "note": "Shop-welded galvanized gate frames (fabric hung on site); walk keyed by height (ft), dbl keyed by opening width (ft)."
+  },
+  "concrete": {
+    "60": 5.5,
+    "80": 6.9,
+    "note": "Bagged concrete mix, per bag, by bag weight (lb)."
+  }
+}

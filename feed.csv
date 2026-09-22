@@ -1,0 +1,55 @@
+key,value,note
+asOf,2026-06-15,Feed as-of date (YYYY-MM-DD)
+region,"Phoenix, AZ (Maricopa County)",Pricing region
+settings.markup,0,Markup applied to material subtotal (%)
+settings.tax,8.6,Sales / transaction-privilege tax rate (%)
+fabricRoll.4,130,"4' high galv 9 ga 2"" mesh ($ per 50' roll)"
+fabricRoll.5,160,"5' high galv 9 ga 2"" mesh ($ per 50' roll)"
+fabricRoll.6,190,"6' high galv 9 ga 2"" mesh ($ per 50' roll)"
+fabricRoll.8,280,"8' high galv 9 ga 2"" mesh ($ per 50' roll)"
+fabricRoll.10,360,"10' high galv 9 ga 2"" mesh ($ per 50' roll)"
+fabricRoll.12,440,"12' high galv 9 ga 2"" mesh ($ per 50' roll)"
+fabricMods.ga11,0.82,11 ga fabric multiplier (× base roll)
+fabricMods.ga115,0.75,11-1/2 ga fabric multiplier (× base roll)
+fabricMods.ga6,1.45,6 ga fabric multiplier (× base roll)
+fabricMods.gaw2,1.1,Galvanized Class 2 (2.0 oz) multiplier (× base roll)
+fabricMods.pvc,1.4,PVC / polymer-coated multiplier (× base roll)
+fabricMods.alum,1.15,Aluminized multiplier (× base roll)
+fabricMods.mesh175,1.12,"1-3/4"" mesh multiplier (× base roll)"
+fabricMods.meshSmall,1.5,"≤1-1/4"" mesh multiplier (× base roll)"
+pipeFt.p166,2.4,"1-5/8"" (1.660) O.D. pipe ($ per lin ft)"
+pipeFt.p1875,3,"1-7/8"" O.D. pipe ($ per lin ft)"
+pipeFt.p19,3,"1.900"" O.D. pipe ($ per lin ft)"
+pipeFt.p2375,3.7,"2-3/8"" O.D. pipe ($ per lin ft)"
+pipeFt.p2875,5.25,"2-7/8"" O.D. pipe ($ per lin ft)"
+pipeFt.p4,9,"4"" O.D. pipe ($ per lin ft)"
+pipeFt.p6625,19,"6-5/8"" O.D. pipe ($ per lin ft)"
+pipeFt.p8625,30,"8-5/8"" O.D. pipe ($ per lin ft)"
+wire.tension,0.17,7 ga galv tension wire ($ per lin ft)
+wire.barb,0.13,Barbed wire ($ per lin ft)
+fit.loopcap,2.75,"Loop cap (line post, rail thru) ($ each)"
+fit.domecap,2.25,Dome / post cap ($ each)
+fit.railend,1.6,Rail end / brace end cup ($ each)
+fit.braceband,1.15,Brace band ($ each)
+fit.tband,0.95,Tension band ($ each)
+fit.tbarft,1.25,Tension bar ($ per lin ft)
+fit.bolt,0.3,Carriage bolt + nut ($ each)
+fit.truss,12,Truss rod + tightener ($ each)
+fit.sleeve,3.25,Top rail sleeve (for cut-at-post rail) ($ each)
+fit.clamp,2.5,Line rail (boulevard) clamp ($ each)
+fit.tie,0.06,Tie wire ($ each)
+fit.hog,0.05,Hog ring ($ each)
+fit.barbarm,4.75,Barb arm (single 45°) ($ each)
+gate.walk.4,150,"Walk gate frame, 4' high ($ each)"
+gate.walk.5,175,"Walk gate frame, 5' high ($ each)"
+gate.walk.6,210,"Walk gate frame, 6' high ($ each)"
+gate.walk.7,265,"Walk gate frame, 7' high ($ each)"
+gate.dbl.12,560,"Double drive gate frames, 12' opening ($ each)"
+gate.dbl.16,700,"Double drive gate frames, 16' opening ($ each)"
+gate.dbl.20,860,"Double drive gate frames, 20' opening ($ each)"
+gate.dbl.24,1020,"Double drive gate frames, 24' opening ($ each)"
+gate.hingepr,18,Hinge set (pair) per leaf ($ per set)
+gate.latch,14,Fork latch ($ each)
+gate.droprod,40,Drop rod set (double gate) ($ per set)
+concrete.60,5.5,60 lb concrete mix ($ per bag)
+concrete.80,6.9,80 lb concrete mix ($ per bag)
