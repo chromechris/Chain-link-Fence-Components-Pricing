@@ -178,7 +178,7 @@ async function cmdResearch(a) {
   const fixture = process.env.UPDATE_FEED_FIXTURE;   // test hook: a saved model reply instead of a live API call
   let Anthropic = null;
   if (!fixture) {
-    try { Anthropic = require("@anthropic-ai/sdk"); } catch (e) { throw new Error("run `npm install` in this folder first (installs @anthropic-ai/sdk)"); }
+    try { const m = require("@anthropic-ai/sdk"); Anthropic = typeof m === "function" ? m : (m.default || m.Anthropic); } catch (e) { throw new Error("run `npm install` in this folder first (installs @anthropic-ai/sdk)"); }
     if (!process.env.ANTHROPIC_API_KEY && !process.env.ANTHROPIC_AUTH_TOKEN && !fs.existsSync(path.join(require("os").homedir(), ".config", "anthropic")))
       throw new Error("No Anthropic credentials. Set ANTHROPIC_API_KEY (console.anthropic.com → API keys) or run `ant auth login`.");
   }
@@ -192,7 +192,7 @@ async function cmdResearch(a) {
   const derivedTxt = derived.map((k) => `${k} | current ${getPath(feed, k)} | ${keys[k].description} — ${keys[k].reason}`).join("\n");
   const system = `You are a fence-material estimator's pricing researcher. You price chain-link fence components for a contractor in ${region}. Prefer fence-supply / wholesale distributor list prices (e.g. Merchants Metals, Master Halco, Stephens Pipe & Steel dealers, local fence supply houses) over big-box retail; use big-box (Home Depot, Lowe's) only when nothing else is published, and say so. Convert everything to the unit stated for the key (per 50' roll, per lineal foot, each, per bag). Never invent a number: if you cannot find a current price for a key, leave it out. Work efficiently — one search can cover several keys.`;
   const user = `Today is ${today()}. Research current prices for these keys. Output units and the item description to price are given per key.\n\nKEY | UNIT | CURRENT | WHAT TO PRICE\n${table}\n\nDerived multipliers (compute only if you priced the inputs; otherwise leave out):\n${derivedTxt}\n\nWhen finished, end your reply with exactly one fenced \`\`\`json block of the form:\n{"asOf":"YYYY-MM-DD","region":"${region}","prices":{"<key>":{"value":<number>,"source":"<url>","title":"<short source name>","note":"<what was priced, retail vs supply, any unit conversion>"}},"unverified":["<keys you could not price>"]}\nOnly include keys you actually found a price for. Values are plain numbers in US dollars (multipliers dimensionless).`;
-  const client = new Anthropic({ maxRetries: 3, timeout: 20 * 60 * 1000 });
+  const client = fixture ? null : new Anthropic({ maxRetries: 3, timeout: 20 * 60 * 1000 });
   let messages = [{ role: "user", content: user }];
   const tools = [{ type: "web_search_20260209", name: "web_search", max_uses: maxSearches, user_location: { type: "approximate", city: region.split(",")[0].trim(), region: "Arizona", country: "US", timezone: "America/Phoenix" } }];
   let final = null, searches = 0;
