@@ -1,0 +1,272 @@
+{
+  "settings.markup": {
+    "unit": "%",
+    "description": "Markup applied to material subtotal",
+    "lookup": null,
+    "reason": "contractor setting, never researched"
+  },
+  "settings.tax": {
+    "unit": "%",
+    "description": "Sales / transaction-privilege tax rate",
+    "lookup": null,
+    "reason": "contractor setting, never researched"
+  },
+  "fabricRoll.4": {
+    "unit": "$ per 50' roll",
+    "description": "4' high galv 9 ga 2\" mesh",
+    "lookup": "4 ft x 50 ft 9 gauge galvanized chain link fence fabric roll, 2 inch mesh"
+  },
+  "fabricRoll.5": {
+    "unit": "$ per 50' roll",
+    "description": "5' high galv 9 ga 2\" mesh",
+    "lookup": "5 ft x 50 ft 9 gauge galvanized chain link fence fabric roll, 2 inch mesh"
+  },
+  "fabricRoll.6": {
+    "unit": "$ per 50' roll",
+    "description": "6' high galv 9 ga 2\" mesh",
+    "lookup": "6 ft x 50 ft 9 gauge galvanized chain link fence fabric roll, 2 inch mesh"
+  },
+  "fabricRoll.8": {
+    "unit": "$ per 50' roll",
+    "description": "8' high galv 9 ga 2\" mesh",
+    "lookup": "8 ft x 50 ft 9 gauge galvanized chain link fence fabric roll, 2 inch mesh"
+  },
+  "fabricRoll.10": {
+    "unit": "$ per 50' roll",
+    "description": "10' high galv 9 ga 2\" mesh",
+    "lookup": "10 ft x 50 ft 9 gauge galvanized chain link fence fabric roll, 2 inch mesh"
+  },
+  "fabricRoll.12": {
+    "unit": "$ per 50' roll",
+    "description": "12' high galv 9 ga 2\" mesh",
+    "lookup": "12 ft x 50 ft 9 gauge galvanized chain link fence fabric roll, 2 inch mesh"
+  },
+  "fabricMods.ga11": {
+    "unit": "× base roll",
+    "description": "11 ga fabric multiplier",
+    "lookup": null,
+    "reason": "derived multiplier: price the coated/gauge 6 ft x 50 ft roll and divide by the 9 ga galv base roll price"
+  },
+  "fabricMods.ga115": {
+    "unit": "× base roll",
+    "description": "11-1/2 ga fabric multiplier",
+    "lookup": null,
+    "reason": "derived multiplier: price the coated/gauge 6 ft x 50 ft roll and divide by the 9 ga galv base roll price"
+  },
+  "fabricMods.ga6": {
+    "unit": "× base roll",
+    "description": "6 ga fabric multiplier",
+    "lookup": null,
+    "reason": "derived multiplier: price the coated/gauge 6 ft x 50 ft roll and divide by the 9 ga galv base roll price"
+  },
+  "fabricMods.gaw2": {
+    "unit": "× base roll",
+    "description": "Galvanized Class 2 (2.0 oz) multiplier",
+    "lookup": null,
+    "reason": "derived multiplier: price the coated/gauge 6 ft x 50 ft roll and divide by the 9 ga galv base roll price"
+  },
+  "fabricMods.pvc": {
+    "unit": "× base roll",
+    "description": "PVC / polymer-coated multiplier",
+    "lookup": null,
+    "reason": "derived multiplier: price the coated/gauge 6 ft x 50 ft roll and divide by the 9 ga galv base roll price"
+  },
+  "fabricMods.alum": {
+    "unit": "× base roll",
+    "description": "Aluminized multiplier",
+    "lookup": null,
+    "reason": "derived multiplier: price the coated/gauge 6 ft x 50 ft roll and divide by the 9 ga galv base roll price"
+  },
+  "fabricMods.mesh175": {
+    "unit": "× base roll",
+    "description": "1-3/4\" mesh multiplier",
+    "lookup": null,
+    "reason": "derived multiplier: price the coated/gauge 6 ft x 50 ft roll and divide by the 9 ga galv base roll price"
+  },
+  "fabricMods.meshSmall": {
+    "unit": "× base roll",
+    "description": "≤1-1/4\" mesh multiplier",
+    "lookup": null,
+    "reason": "derived multiplier: price the coated/gauge 6 ft x 50 ft roll and divide by the 9 ga galv base roll price"
+  },
+  "pipeFt.p166": {
+    "unit": "$ per lin ft",
+    "description": "1-5/8\" (1.660) O.D. pipe",
+    "lookup": "galvanized chain link fence pipe 1-5/8\" (1.660) OD, 21 ft stick (divide stick price by 21 for per-foot)"
+  },
+  "pipeFt.p1875": {
+    "unit": "$ per lin ft",
+    "description": "1-7/8\" O.D. pipe",
+    "lookup": "galvanized chain link fence pipe 1-7/8\" OD, 21 ft stick (divide stick price by 21 for per-foot)"
+  },
+  "pipeFt.p19": {
+    "unit": "$ per lin ft",
+    "description": "1.900\" O.D. pipe",
+    "lookup": "galvanized chain link fence pipe 1.900\" OD, 21 ft stick (divide stick price by 21 for per-foot)"
+  },
+  "pipeFt.p2375": {
+    "unit": "$ per lin ft",
+    "description": "2-3/8\" O.D. pipe",
+    "lookup": "galvanized chain link fence pipe 2-3/8\" OD, 21 ft stick (divide stick price by 21 for per-foot)"
+  },
+  "pipeFt.p2875": {
+    "unit": "$ per lin ft",
+    "description": "2-7/8\" O.D. pipe",
+    "lookup": "galvanized chain link fence pipe 2-7/8\" OD, 21 ft stick (divide stick price by 21 for per-foot)"
+  },
+  "pipeFt.p4": {
+    "unit": "$ per lin ft",
+    "description": "4\" O.D. pipe",
+    "lookup": "galvanized chain link fence pipe 4\" OD, 21 ft stick (divide stick price by 21 for per-foot)"
+  },
+  "pipeFt.p6625": {
+    "unit": "$ per lin ft",
+    "description": "6-5/8\" O.D. pipe",
+    "lookup": "galvanized chain link fence pipe 6-5/8\" OD, 21 ft stick (divide stick price by 21 for per-foot)"
+  },
+  "pipeFt.p8625": {
+    "unit": "$ per lin ft",
+    "description": "8-5/8\" O.D. pipe",
+    "lookup": "galvanized chain link fence pipe 8-5/8\" OD, 21 ft stick (divide stick price by 21 for per-foot)"
+  },
+  "wire.tension": {
+    "unit": "$ per lin ft",
+    "description": "7 ga galv tension wire",
+    "lookup": "7 ga galv tension wire galvanized chain link fence"
+  },
+  "wire.barb": {
+    "unit": "$ per lin ft",
+    "description": "Barbed wire",
+    "lookup": "Barbed wire galvanized chain link fence"
+  },
+  "fit.loopcap": {
+    "unit": "$ each",
+    "description": "Loop cap (line post, rail thru)",
+    "lookup": "Loop cap (line post, rail thru) galvanized chain link fence"
+  },
+  "fit.domecap": {
+    "unit": "$ each",
+    "description": "Dome / post cap",
+    "lookup": "Dome / post cap galvanized chain link fence"
+  },
+  "fit.railend": {
+    "unit": "$ each",
+    "description": "Rail end / brace end cup",
+    "lookup": "Rail end / brace end cup galvanized chain link fence"
+  },
+  "fit.braceband": {
+    "unit": "$ each",
+    "description": "Brace band",
+    "lookup": "Brace band galvanized chain link fence"
+  },
+  "fit.tband": {
+    "unit": "$ each",
+    "description": "Tension band",
+    "lookup": "Tension band galvanized chain link fence"
+  },
+  "fit.tbarft": {
+    "unit": "$ per lin ft",
+    "description": "Tension bar",
+    "lookup": "Tension bar galvanized chain link fence"
+  },
+  "fit.bolt": {
+    "unit": "$ each",
+    "description": "Carriage bolt + nut",
+    "lookup": "Carriage bolt + nut galvanized chain link fence"
+  },
+  "fit.truss": {
+    "unit": "$ each",
+    "description": "Truss rod + tightener",
+    "lookup": "Truss rod + tightener galvanized chain link fence"
+  },
+  "fit.sleeve": {
+    "unit": "$ each",
+    "description": "Top rail sleeve (for cut-at-post rail)",
+    "lookup": "Top rail sleeve (for cut-at-post rail) galvanized chain link fence"
+  },
+  "fit.clamp": {
+    "unit": "$ each",
+    "description": "Line rail (boulevard) clamp",
+    "lookup": "Line rail (boulevard) clamp galvanized chain link fence"
+  },
+  "fit.tie": {
+    "unit": "$ each",
+    "description": "Tie wire",
+    "lookup": "Tie wire galvanized chain link fence"
+  },
+  "fit.hog": {
+    "unit": "$ each",
+    "description": "Hog ring",
+    "lookup": "Hog ring galvanized chain link fence"
+  },
+  "fit.barbarm": {
+    "unit": "$ each",
+    "description": "Barb arm (single 45°)",
+    "lookup": "Barb arm (single 45°) galvanized chain link fence"
+  },
+  "gate.walk.4": {
+    "unit": "$ each",
+    "description": "Walk gate frame, 4' high",
+    "lookup": "galvanized chain link walk gate frame, 4 ft wide x 4' high (frame only, no fabric)"
+  },
+  "gate.walk.5": {
+    "unit": "$ each",
+    "description": "Walk gate frame, 5' high",
+    "lookup": "galvanized chain link walk gate frame, 4 ft wide x 5' high (frame only, no fabric)"
+  },
+  "gate.walk.6": {
+    "unit": "$ each",
+    "description": "Walk gate frame, 6' high",
+    "lookup": "galvanized chain link walk gate frame, 4 ft wide x 6' high (frame only, no fabric)"
+  },
+  "gate.walk.7": {
+    "unit": "$ each",
+    "description": "Walk gate frame, 7' high",
+    "lookup": "galvanized chain link walk gate frame, 4 ft wide x 7' high (frame only, no fabric)"
+  },
+  "gate.dbl.12": {
+    "unit": "$ each",
+    "description": "Double drive gate frames, 12' opening",
+    "lookup": "galvanized chain link double drive gate frames, 12' opening opening (pair, frames only)"
+  },
+  "gate.dbl.16": {
+    "unit": "$ each",
+    "description": "Double drive gate frames, 16' opening",
+    "lookup": "galvanized chain link double drive gate frames, 16' opening opening (pair, frames only)"
+  },
+  "gate.dbl.20": {
+    "unit": "$ each",
+    "description": "Double drive gate frames, 20' opening",
+    "lookup": "galvanized chain link double drive gate frames, 20' opening opening (pair, frames only)"
+  },
+  "gate.dbl.24": {
+    "unit": "$ each",
+    "description": "Double drive gate frames, 24' opening",
+    "lookup": "galvanized chain link double drive gate frames, 24' opening opening (pair, frames only)"
+  },
+  "gate.hingepr": {
+    "unit": "$ per set",
+    "description": "Hinge set (pair) per leaf",
+    "lookup": "Hinge set (pair) per leaf galvanized chain link fence"
+  },
+  "gate.latch": {
+    "unit": "$ each",
+    "description": "Fork latch",
+    "lookup": "Fork latch galvanized chain link fence"
+  },
+  "gate.droprod": {
+    "unit": "$ per set",
+    "description": "Drop rod set (double gate)",
+    "lookup": "Drop rod set (double gate) galvanized chain link fence"
+  },
+  "concrete.80": {
+    "unit": "$ per bag",
+    "description": "80 lb concrete mix",
+    "lookup": "80 lb concrete mix galvanized chain link fence"
+  },
+  "concrete.60": {
+    "unit": "$ per bag",
+    "description": "60 lb concrete mix",
+    "lookup": "60 lb concrete mix galvanized chain link fence"
+  }
+}

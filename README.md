@@ -37,7 +37,7 @@ All money values are US dollars, plain numbers (no `$`, no thousands separators)
 
 Markup is a contractor choice (0 = none). Tax is the Phoenix combined TPT rate (state 5.6% + Maricopa 0.7% + Phoenix 2.3%).
 
-| Key | Unit | Description | Seed value |
+| Key | Unit | Description | Current value |
 |---|---|---|---|
 | `settings.markup` | % | Markup applied to material subtotal | 0 |
 | `settings.tax` | % | Sales / transaction-privilege tax rate | 8.6 |
@@ -46,7 +46,7 @@ Markup is a contractor choice (0 = none). Tax is the Phoenix combined TPT rate (
 
 Galvanized 9 ga, 2" mesh, 50' roll, by fence height. Big-box + fence-supply list prices, June 2026.
 
-| Key | Unit | Description | Seed value |
+| Key | Unit | Description | Current value |
 |---|---|---|---|
 | `fabricRoll.4` | $ per 50' roll | 4' high galv 9 ga 2" mesh | 130 |
 | `fabricRoll.5` | $ per 50' roll | 5' high galv 9 ga 2" mesh | 160 |
@@ -59,7 +59,7 @@ Galvanized 9 ga, 2" mesh, 50' roll, by fence height. Big-box + fence-supply list
 
 Dimensionless multipliers applied to the base roll price for gauge, coating and mesh size.
 
-| Key | Unit | Description | Seed value |
+| Key | Unit | Description | Current value |
 |---|---|---|---|
 | `fabricMods.ga11` | × base roll | 11 ga fabric multiplier | 0.82 |
 | `fabricMods.ga115` | × base roll | 11-1/2 ga fabric multiplier | 0.75 |
@@ -74,7 +74,7 @@ Dimensionless multipliers applied to the base roll price for gauge, coating and 
 
 Galvanized SS20/SS40 fence pipe, per lineal foot, by outside diameter. Keys drop the decimal point (p2375 = 2.375").
 
-| Key | Unit | Description | Seed value |
+| Key | Unit | Description | Current value |
 |---|---|---|---|
 | `pipeFt.p166` | $ per lin ft | 1-5/8" (1.660) O.D. pipe | 2.4 |
 | `pipeFt.p1875` | $ per lin ft | 1-7/8" O.D. pipe | 3 |
@@ -89,7 +89,7 @@ Galvanized SS20/SS40 fence pipe, per lineal foot, by outside diameter. Keys drop
 
 7 ga galvanized tension wire and 12.5 ga 2-pt barbed wire, per lineal foot.
 
-| Key | Unit | Description | Seed value |
+| Key | Unit | Description | Current value |
 |---|---|---|---|
 | `wire.tension` | $ per lin ft | 7 ga galv tension wire | 0.17 |
 | `wire.barb` | $ per lin ft | Barbed wire | 0.13 |
@@ -98,7 +98,7 @@ Galvanized SS20/SS40 fence pipe, per lineal foot, by outside diameter. Keys drop
 
 Galvanized fittings and hardware, each; tbarft is tension bar per lineal foot.
 
-| Key | Unit | Description | Seed value |
+| Key | Unit | Description | Current value |
 |---|---|---|---|
 | `fit.loopcap` | $ each | Loop cap (line post, rail thru) | 2.75 |
 | `fit.domecap` | $ each | Dome / post cap | 2.25 |
@@ -118,7 +118,7 @@ Galvanized fittings and hardware, each; tbarft is tension bar per lineal foot.
 
 Shop-welded galvanized gate frames (fabric hung on site); walk keyed by height (ft), dbl keyed by opening width (ft).
 
-| Key | Unit | Description | Seed value |
+| Key | Unit | Description | Current value |
 |---|---|---|---|
 | `gate.walk.4` | $ each | Walk gate frame, 4' high | 150 |
 | `gate.walk.5` | $ each | Walk gate frame, 5' high | 175 |
@@ -136,7 +136,7 @@ Shop-welded galvanized gate frames (fabric hung on site); walk keyed by height (
 
 Bagged concrete mix, per bag, by bag weight (lb).
 
-| Key | Unit | Description | Seed value |
+| Key | Unit | Description | Current value |
 |---|---|---|---|
 | `concrete.60` | $ per bag | 60 lb concrete mix | 5.5 |
 | `concrete.80` | $ per bag | 80 lb concrete mix | 6.9 |
@@ -148,22 +148,52 @@ Bagged concrete mix, per bag, by bag weight (lb).
 3. The app shows every key side by side: current price book value vs feed value, with changed lines pre-checked. Accept all, accept only the checked lines, or cancel. Nothing changes until you accept.
 4. Accepted prices are saved in the browser / desktop app's local storage together with the feed's `asOf` date and URL, so they survive a reload. **Restore Arizona defaults** in the Price Book throws the saved book away and returns to the built-in values.
 
-## Updating the feed
+## Updating the feed — `update-feed.js`
 
-1. Edit `feed.json` (keep the structure; change numbers, `asOf`, `region`, and the `note` strings). Use a date you actually verified prices on.
-2. Mirror the change in `feed.csv`, or regenerate the CSV from the JSON with this one-liner (Node.js):
+The numbers in this repo do **not** refresh themselves. `update-feed.js` is the program that produces a new `feed.json` / `feed.csv` (plus `SOURCES.md`, the citation for every changed value) and pushes them. Requirements: [Node.js](https://nodejs.org) 18+, then once in this folder:
 
-   ```bash
-   node -e "const f=require('./feed.json');const rows=['key,value,note','asOf,'+f.asOf+',Feed as-of date (YYYY-MM-DD)','region,\"'+f.region+'\",Pricing region'];const walk=(o,p)=>Object.keys(o).forEach(k=>{if(k==='note')return;const v=o[k],q=p?p+'.'+k:k;v&&typeof v==='object'?walk(v,q):rows.push(q+','+v+',')});['settings','fabricRoll','fabricMods','pipeFt','wire','fit','gate','concrete'].forEach(s=>walk(f[s],s));require('fs').writeFileSync('feed.csv',rows.join('\n')+'\n')"
-   ```
+```bash
+npm install
+```
 
-   (This drops the per-key notes in the CSV; restore them from git if you want to keep them.)
-3. Validate: `node -e "JSON.parse(require('fs').readFileSync('feed.json'))"` must print nothing.
-4. Commit and push to `main`. The raw URL serves the new file within about five minutes; the app's cache-buster makes the next fetch pick it up immediately after that.
+### 1. Claude web research (automatic, cited)
+
+```bash
+node update-feed.js research --push
+```
+
+Claude searches current fence-supply and retail listings for the region, prices every key it can find, cites each source, and holds anything it could not verify (those keys keep their previous value). Windows: double-click **`Update-Prices.bat`** to do the same thing.
+
+- Needs an Anthropic API key: create one at console.anthropic.com, then either set the Windows environment variable `ANTHROPIC_API_KEY`, or create a file named `.env` in this folder containing `ANTHROPIC_API_KEY=sk-ant-...` (the `.bat` reads it; `.env` is git-ignored). Each run costs on the order of a dollar or two in API usage.
+- Options: `--region "Tucson, AZ"`, `--dry-run` (show what would change, write nothing), `--max-searches 60`, `--model claude-sonnet-5` (cheaper), `--allow-big-moves` (accept values that move more than 3x, which are otherwise held as probable unit mistakes).
+- Without `--push` the files are written locally; review `git diff` and `SOURCES.md`, then `node update-feed.js publish`.
+
+### 2. Supplier quote CSV (most accurate for bidding)
+
+```bash
+node update-feed.js quote my-supplier-quote.csv --push
+```
+
+Export or type your supply house's quote as a CSV with a description (or SKU) column and a price column, e.g. `quote-sample.csv`. `quote-map.json` maps each feed key to a regex on the description (or a list of SKUs) and a `divideBy` for unit conversion (21' pipe stick to per-foot, a 6' tension bar to per-foot). Edit the patterns to match your supplier's wording; keys with no matching line keep their previous value and are listed in `SOURCES.md`. `--as-of 2026-09-15` sets the quote date; `--dry-run` previews.
+
+### 3. Manual
+
+```bash
+node update-feed.js set pipeFt.p2375=3.95 concrete.80=7.25 --push
+```
+
+Or edit `feed.json` by hand, then `node update-feed.js sync` to regenerate `feed.csv` and the README table, and `node update-feed.js publish`.
+
+### 4. On a schedule (optional)
+
+`.github/workflows/update-prices.yml` runs the research mode on GitHub's servers and opens a pull request for you to review and merge. Add the repo secret `ANTHROPIC_API_KEY`, run it from the Actions tab, and uncomment the `schedule` block for a monthly run.
+
+### After any update
+
+Push to `main`, then in the app click Price Book → **Update prices from feed**, review the diff, and accept. The raw GitHub URL can lag by about five minutes.
 
 ### Rules
 
-- Never remove a key. The app ignores unknown keys but a missing key simply keeps the current price book value, so removing keys silently freezes prices.
-- Never rename a key. Key names are the app's internal price-book paths.
+- Never remove or rename a key: the app ignores unknown keys, and a missing key silently keeps the old price. `update-feed.js` refuses to write a feed that fails this check.
 - Keep prices in the units listed above (per roll, per lineal foot, each, per bag).
-- Contractor / fence-supply pricing is preferred over big-box retail; note the source in the section `note`.
+- Contractor / fence-supply pricing is preferred over big-box retail; `SOURCES.md` records which one each value came from.

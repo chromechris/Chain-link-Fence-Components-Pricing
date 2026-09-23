@@ -1,0 +1,41 @@
+# Optional: refresh the feed on a schedule and open a pull request for review.
+# Needs a repo secret ANTHROPIC_API_KEY (Settings → Secrets and variables → Actions).
+# Runs only when you click "Run workflow" until you uncomment the schedule block.
+name: Update prices
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "0 14 1 * *"   # 07:00 Phoenix time on the 1st of each month
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - name: Research current prices
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node update-feed.js research
+      - name: Open pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: price-update
+          title: "Price research update"
+          commit-message: "Price research update (automated)"
+          body: |
+            Automated price research. Review `SOURCES.md` for the citation behind every changed value, then merge.
+            Values that moved more than 3x were held (see the "Not updated" list in SOURCES.md).
+          add-paths: |
+            feed.json
+            feed.csv
+            SOURCES.md
+            README.md

@@ -1,0 +1,27 @@
+{
+  "name": "chain-link-fence-components-pricing",
+  "version": "1.0.0",
+  "description": "Price feed + updater for the Chain-Link Material Takeoff app",
+  "main": "update-feed.js",
+  "scripts": {
+    "research": "node update-feed.js research",
+    "quote": "node update-feed.js quote",
+    "sync": "node update-feed.js sync",
+    "publish": "node update-feed.js publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chromechris/Chain-link-Fence-Components-Pricing.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chromechris/Chain-link-Fence-Components-Pricing/issues"
+  },
+  "homepage": "https://github.com/chromechris/Chain-link-Fence-Components-Pricing#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0"
+  },
+  "private": true
+}
