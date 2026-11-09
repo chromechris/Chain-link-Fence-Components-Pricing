@@ -1,55 +1,433 @@
 {
-  "_comment": "Maps each feed key to lines in a supplier quote CSV. `patterns` are case-insensitive regexes tested against the quote's description column; `skus` match the sku/part column exactly. `divideBy` converts a per-stick or per-box price to the feed unit (e.g. 21' pipe stick -> per foot). Edit these to match how YOUR supplier words their lines.",
-  "settings.markup": { "patterns": ["^__never__$"] },
-  "settings.tax": { "patterns": ["^__never__$"] },
-  "fabricRoll.4": { "patterns": ["\\b4[' ]?(ft|')?\\s*[x×]\\s*50.*\\b9\\s*ga.*(galv|gaw)", "\\b48\"?.*50'.*9\\s*ga.*(galv|gaw)"] },
-  "fabricRoll.5": { "patterns": ["\\b5[' ]?(ft|')?\\s*[x×]\\s*50.*\\b9\\s*ga.*(galv|gaw)", "\\b60\"?.*50'.*9\\s*ga.*(galv|gaw)"] },
-  "fabricRoll.6": { "patterns": ["\\b6[' ]?(ft|')?\\s*[x×]\\s*50.*\\b9\\s*ga.*(galv|gaw)", "\\b72\"?.*50'.*9\\s*ga.*(galv|gaw)"] },
-  "fabricRoll.8": { "patterns": ["\\b8[' ]?(ft|')?\\s*[x×]\\s*50.*\\b9\\s*ga.*(galv|gaw)", "\\b96\"?.*50'.*9\\s*ga.*(galv|gaw)"] },
-  "fabricRoll.10": { "patterns": ["\\b10[' ]?(ft|')?\\s*[x×]\\s*50.*\\b9\\s*ga.*(galv|gaw)", "\\b120\"?.*50'.*9\\s*ga.*(galv|gaw)"] },
-  "fabricRoll.12": { "patterns": ["\\b12[' ]?(ft|')?\\s*[x×]\\s*50.*\\b9\\s*ga.*(galv|gaw)", "\\b144\"?.*50'.*9\\s*ga.*(galv|gaw)"] },
-  "fabricMods.ga11": { "patterns": ["^__multiplier: price a 6x50 11 ga roll and divide by fabricRoll.6 by hand__$"] },
-  "fabricMods.ga115": { "patterns": ["^__multiplier__$"] },
-  "fabricMods.ga6": { "patterns": ["^__multiplier__$"] },
-  "fabricMods.gaw2": { "patterns": ["^__multiplier__$"] },
-  "fabricMods.pvc": { "patterns": ["^__multiplier__$"] },
-  "fabricMods.alum": { "patterns": ["^__multiplier__$"] },
-  "fabricMods.mesh175": { "patterns": ["^__multiplier__$"] },
-  "fabricMods.meshSmall": { "patterns": ["^__multiplier__$"] },
-  "pipeFt.p166": { "patterns": ["1[\\s-]*5/8.*(pipe|rail|tube)", "1\\.660.*(pipe|rail|tube)"], "divideBy": 21 },
-  "pipeFt.p1875": { "patterns": ["1[\\s-]*7/8.*(pipe|rail|tube)", "1\\.875.*(pipe|rail|tube)"], "divideBy": 21 },
-  "pipeFt.p19": { "patterns": ["1\\.900?.*(pipe|post|tube)"], "divideBy": 21 },
-  "pipeFt.p2375": { "patterns": ["2[\\s-]*3/8.*(pipe|post|tube)", "2\\.375.*(pipe|post|tube)"], "divideBy": 21 },
-  "pipeFt.p2875": { "patterns": ["2[\\s-]*7/8.*(pipe|post|tube)", "2\\.875.*(pipe|post|tube)"], "divideBy": 21 },
-  "pipeFt.p4": { "patterns": ["\\b4(\\.000|\")?\\s*(od|o\\.d\\.).*(pipe|post|tube)", "\\b4\"\\s*(pipe|post)"], "divideBy": 21 },
-  "pipeFt.p6625": { "patterns": ["6[\\s-]*5/8.*(pipe|post|tube)", "6\\.625.*(pipe|post|tube)"], "divideBy": 21 },
-  "pipeFt.p8625": { "patterns": ["8[\\s-]*5/8.*(pipe|post|tube)", "8\\.625.*(pipe|post|tube)"], "divideBy": 21 },
-  "wire.tension": { "patterns": ["tension wire.*7\\s*ga", "7\\s*ga.*tension wire", "coil spring wire"], "divideBy": 1 },
-  "wire.barb": { "patterns": ["barb(ed)? wire"], "divideBy": 1 },
-  "fit.loopcap": { "patterns": ["loop cap", "eye top", "line post top"] },
-  "fit.domecap": { "patterns": ["dome cap", "post cap", "acorn cap"] },
-  "fit.railend": { "patterns": ["rail end", "brace end", "end cup"] },
-  "fit.braceband": { "patterns": ["brace band"] },
-  "fit.tband": { "patterns": ["tension band"] },
-  "fit.tbarft": { "patterns": ["tension bar"], "divideBy": 6, "_note": "suppliers quote tension bars per bar; set divideBy to the bar length (ft) on the quoted line" },
-  "fit.bolt": { "patterns": ["carriage bolt"] },
-  "fit.truss": { "patterns": ["truss rod", "truss tightener"] },
-  "fit.sleeve": { "patterns": ["(rail|top rail) sleeve", "swedge sleeve"] },
-  "fit.clamp": { "patterns": ["(line rail|boulevard|rail) clamp"] },
-  "fit.tie": { "patterns": ["tie wire", "fence tie", "aluminum tie"] },
-  "fit.hog": { "patterns": ["hog ring"] },
-  "fit.barbarm": { "patterns": ["barb arm", "barbed wire arm"] },
-  "gate.walk.4": { "patterns": ["walk gate.*[x×]\\s*4[' ]?(ft|')?\\b", "walk gate.*\\b4[' ]?(ft|')?\\s*(h\\b|high|tall)"], "_note": "walk gates are quoted width x height; the height is the number after the x" },
-  "gate.walk.5": { "patterns": ["walk gate.*[x×]\\s*5[' ]?(ft|')?\\b", "walk gate.*\\b5[' ]?(ft|')?\\s*(h\\b|high|tall)"] },
-  "gate.walk.6": { "patterns": ["walk gate.*[x×]\\s*6[' ]?(ft|')?\\b", "walk gate.*\\b6[' ]?(ft|')?\\s*(h\\b|high|tall)"] },
-  "gate.walk.7": { "patterns": ["walk gate.*[x×]\\s*7[' ]?(ft|')?\\b", "walk gate.*\\b7[' ]?(ft|')?\\s*(h\\b|high|tall)"] },
-  "gate.dbl.12": { "patterns": ["double.*gate.*\\b12[' ]?(ft|')?\\s*(w|wide|opening|x)"] },
-  "gate.dbl.16": { "patterns": ["double.*gate.*\\b16[' ]?(ft|')?\\s*(w|wide|opening|x)"] },
-  "gate.dbl.20": { "patterns": ["double.*gate.*\\b20[' ]?(ft|')?\\s*(w|wide|opening|x)"] },
-  "gate.dbl.24": { "patterns": ["double.*gate.*\\b24[' ]?(ft|')?\\s*(w|wide|opening|x)"] },
-  "gate.hingepr": { "patterns": ["hinge (set|pair|kit)", "male.*female hinge"] },
-  "gate.latch": { "patterns": ["fork latch", "gate latch"] },
-  "gate.droprod": { "patterns": ["drop rod", "cane bolt"] },
-  "concrete.80": { "patterns": ["80\\s*lb.*(concrete|mix)", "concrete.*80\\s*lb"] },
-  "concrete.60": { "patterns": ["60\\s*lb.*(concrete|mix)", "concrete.*60\\s*lb"] }
+  "_comment": "Maps each feed key to lines in a supplier quote CSV. `patterns`: case-insensitive regexes on the description column (any one matches); `exclude`: regexes that reject a line even if a pattern matched; `skus`: exact matches on the sku/part column (checked first, ignore exclude). `per` is the feed unit: `each` (default; UOM C = /100, M = /1000, and 'BAG OF 100' or '1000/BX' in the text divide by the pack), `ft` (UOM FT/LF used as is, else divided by the stick/bar/coil length in the text, else by `divideBy`), `roll50` (fabric per 50' roll; 100' rolls are halved, per-foot prices x50). `manual: true` keys are never priced from a quote. The first line that matches wins. Edit these to match how YOUR supplier words their lines; test with: node update-feed.js quote <file.csv> --dry-run",
+  "settings.markup": {
+    "manual": true,
+    "_note": "your markup %, not a supplier price"
+  },
+  "settings.tax": {
+    "manual": true,
+    "_note": "sales tax %, not a supplier price"
+  },
+  "fabricRoll.4": {
+    "per": "roll50",
+    "patterns": [
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b4\\s*(?:'|ft|feet)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)",
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b48\\s*(?:\"|in\\b|inch)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)"
+    ],
+    "exclude": [
+      "vinyl|pvc|poly|\\bblk\\b|black|green|\\bgrn\\b|brown|bronze|alumini?zed|\\balum\\b|aluminum|slat|privacy|windscreen",
+      "\\b(11|11\\s*-?\\s*1/2|6)\\s*-?\\s*ga"
+    ]
+  },
+  "fabricRoll.5": {
+    "per": "roll50",
+    "patterns": [
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b5\\s*(?:'|ft|feet)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)",
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b60\\s*(?:\"|in\\b|inch)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)"
+    ],
+    "exclude": [
+      "vinyl|pvc|poly|\\bblk\\b|black|green|\\bgrn\\b|brown|bronze|alumini?zed|\\balum\\b|aluminum|slat|privacy|windscreen",
+      "\\b(11|11\\s*-?\\s*1/2|6)\\s*-?\\s*ga"
+    ]
+  },
+  "fabricRoll.6": {
+    "per": "roll50",
+    "patterns": [
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b6\\s*(?:'|ft|feet)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)",
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b72\\s*(?:\"|in\\b|inch)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)"
+    ],
+    "exclude": [
+      "vinyl|pvc|poly|\\bblk\\b|black|green|\\bgrn\\b|brown|bronze|alumini?zed|\\balum\\b|aluminum|slat|privacy|windscreen",
+      "\\b(11|11\\s*-?\\s*1/2|6)\\s*-?\\s*ga"
+    ]
+  },
+  "fabricRoll.8": {
+    "per": "roll50",
+    "patterns": [
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b8\\s*(?:'|ft|feet)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)",
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b96\\s*(?:\"|in\\b|inch)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)"
+    ],
+    "exclude": [
+      "vinyl|pvc|poly|\\bblk\\b|black|green|\\bgrn\\b|brown|bronze|alumini?zed|\\balum\\b|aluminum|slat|privacy|windscreen",
+      "\\b(11|11\\s*-?\\s*1/2|6)\\s*-?\\s*ga"
+    ]
+  },
+  "fabricRoll.10": {
+    "per": "roll50",
+    "patterns": [
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b10\\s*(?:'|ft|feet)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)",
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b120\\s*(?:\"|in\\b|inch)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)"
+    ],
+    "exclude": [
+      "vinyl|pvc|poly|\\bblk\\b|black|green|\\bgrn\\b|brown|bronze|alumini?zed|\\balum\\b|aluminum|slat|privacy|windscreen",
+      "\\b(11|11\\s*-?\\s*1/2|6)\\s*-?\\s*ga"
+    ]
+  },
+  "fabricRoll.12": {
+    "per": "roll50",
+    "patterns": [
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b12\\s*(?:'|ft|feet)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)",
+      "^(?=.*(#\\s*9\\b|\\b9\\s*-?\\s*ga|\\b9\\s*gauge))(?=.*(galv|\\bgaw\\b|\\bgbw\\b|\\bga\\.?\\s*k?k?\\b|zinc)).*\\b144\\s*(?:\"|in\\b|inch)?\\s*(?:h\\b|high|tall)?\\s*[x×]\\s*(?:50|100)\\s*(?:'|ft|feet)"
+    ],
+    "exclude": [
+      "vinyl|pvc|poly|\\bblk\\b|black|green|\\bgrn\\b|brown|bronze|alumini?zed|\\balum\\b|aluminum|slat|privacy|windscreen",
+      "\\b(11|11\\s*-?\\s*1/2|6)\\s*-?\\s*ga"
+    ]
+  },
+  "fabricMods.ga11": {
+    "manual": true,
+    "_note": "a multiplier on fabricRoll: price the variant roll and divide by the matching 9 ga galv roll, then `node update-feed.js set`"
+  },
+  "fabricMods.ga115": {
+    "manual": true,
+    "_note": "a multiplier on fabricRoll: price the variant roll and divide by the matching 9 ga galv roll, then `node update-feed.js set`"
+  },
+  "fabricMods.ga6": {
+    "manual": true,
+    "_note": "a multiplier on fabricRoll: price the variant roll and divide by the matching 9 ga galv roll, then `node update-feed.js set`"
+  },
+  "fabricMods.gaw2": {
+    "manual": true,
+    "_note": "a multiplier on fabricRoll: price the variant roll and divide by the matching 9 ga galv roll, then `node update-feed.js set`"
+  },
+  "fabricMods.pvc": {
+    "manual": true,
+    "_note": "a multiplier on fabricRoll: price the variant roll and divide by the matching 9 ga galv roll, then `node update-feed.js set`"
+  },
+  "fabricMods.alum": {
+    "manual": true,
+    "_note": "a multiplier on fabricRoll: price the variant roll and divide by the matching 9 ga galv roll, then `node update-feed.js set`"
+  },
+  "fabricMods.mesh175": {
+    "manual": true,
+    "_note": "a multiplier on fabricRoll: price the variant roll and divide by the matching 9 ga galv roll, then `node update-feed.js set`"
+  },
+  "fabricMods.meshSmall": {
+    "manual": true,
+    "_note": "a multiplier on fabricRoll: price the variant roll and divide by the matching 9 ga galv roll, then `node update-feed.js set`"
+  },
+  "pipeFt.p166": {
+    "per": "ft",
+    "patterns": [
+      "(?<![\\d/])1[\\s-]*5/8\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|rail|tube|tubing|brace|swedged?|ss\\s*\\d\\d|sch\\s*40)",
+      "(?<![\\d.])1\\.66\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|rail|tube|tubing|brace|swedged?|ss\\s*\\d\\d|sch\\s*40)"
+    ],
+    "exclude": [
+      "\\b(cap|band|clamp|rail end|end cup|sleeve|hinge|latch|collar|bracket|frame|tie|arm|gate\\s+(?!post)|fork|plunger|drop rod|tension bar)\\b"
+    ],
+    "divideBy": 21
+  },
+  "pipeFt.p1875": {
+    "per": "ft",
+    "patterns": [
+      "(?<![\\d/])1[\\s-]*7/8\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|rail|tube|tubing|brace|swedged?|ss\\s*\\d\\d|sch\\s*40|pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)",
+      "(?<![\\d.])1\\.875?\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|rail|tube|tubing|brace|swedged?|ss\\s*\\d\\d|sch\\s*40|pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)"
+    ],
+    "exclude": [
+      "\\b(cap|band|clamp|rail end|end cup|sleeve|hinge|latch|collar|bracket|frame|tie|arm|gate\\s+(?!post)|fork|plunger|drop rod|tension bar)\\b"
+    ],
+    "divideBy": 21
+  },
+  "pipeFt.p19": {
+    "per": "ft",
+    "patterns": [
+      "(?<![\\d.])1\\.90?\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post|pipe|rail|tube|tubing|brace|swedged?|ss\\s*\\d\\d|sch\\s*40)"
+    ],
+    "exclude": [
+      "\\b(cap|band|clamp|rail end|end cup|sleeve|hinge|latch|collar|bracket|frame|tie|arm|gate\\s+(?!post)|fork|plunger|drop rod|tension bar)\\b"
+    ],
+    "divideBy": 21
+  },
+  "pipeFt.p2375": {
+    "per": "ft",
+    "patterns": [
+      "(?<![\\d/])2[\\s-]*3/8\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)",
+      "(?<![\\d.])2\\.375?\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)"
+    ],
+    "exclude": [
+      "\\b(cap|band|clamp|rail end|end cup|sleeve|hinge|latch|collar|bracket|frame|tie|arm|gate\\s+(?!post)|fork|plunger|drop rod|tension bar)\\b"
+    ],
+    "divideBy": 21
+  },
+  "pipeFt.p2875": {
+    "per": "ft",
+    "patterns": [
+      "(?<![\\d/])2[\\s-]*7/8\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)",
+      "(?<![\\d.])2\\.875?\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)"
+    ],
+    "exclude": [
+      "\\b(cap|band|clamp|rail end|end cup|sleeve|hinge|latch|collar|bracket|frame|tie|arm|gate\\s+(?!post)|fork|plunger|drop rod|tension bar)\\b"
+    ],
+    "divideBy": 21
+  },
+  "pipeFt.p4": {
+    "per": "ft",
+    "patterns": [
+      "(?<![\\d./-])4(?:\\.0+)?\\s*(?:\"|in\\b|od\\b|o\\.d\\.).*\\b(pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)"
+    ],
+    "exclude": [
+      "\\b(cap|band|clamp|rail end|end cup|sleeve|hinge|latch|collar|bracket|frame|tie|arm|gate\\s+(?!post)|fork|plunger|drop rod|tension bar)\\b"
+    ],
+    "divideBy": 21
+  },
+  "pipeFt.p6625": {
+    "per": "ft",
+    "patterns": [
+      "(?<![\\d/])6[\\s-]*5/8\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)",
+      "(?<![\\d.])6\\.625?\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)"
+    ],
+    "exclude": [
+      "\\b(cap|band|clamp|rail end|end cup|sleeve|hinge|latch|collar|bracket|frame|tie|arm|gate\\s+(?!post)|fork|plunger|drop rod|tension bar)\\b"
+    ],
+    "divideBy": 21
+  },
+  "pipeFt.p8625": {
+    "per": "ft",
+    "patterns": [
+      "(?<![\\d/])8[\\s-]*5/8\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)",
+      "(?<![\\d.])8\\.625?\\s*(?:\"|in\\b|od\\b|o\\.d\\.)?.*\\b(pipe|post|tube|tubing|pp\\b|sch\\s*40|ss\\s*\\d\\d|line|terminal|corner|end|gate post)"
+    ],
+    "exclude": [
+      "\\b(cap|band|clamp|rail end|end cup|sleeve|hinge|latch|collar|bracket|frame|tie|arm|gate\\s+(?!post)|fork|plunger|drop rod|tension bar)\\b"
+    ],
+    "divideBy": 21
+  },
+  "wire.tension": {
+    "per": "ft",
+    "patterns": [
+      "tension wire",
+      "coil(ed)? spring wire",
+      "bottom wire.*7\\s*ga"
+    ],
+    "exclude": [
+      "\\bbarb",
+      "\\btie\\b|\\bties\\b"
+    ]
+  },
+  "wire.barb": {
+    "per": "ft",
+    "patterns": [
+      "barb(ed)? wire",
+      "\\bbarb\\b.*\\b(roll|reel|coil)"
+    ],
+    "exclude": [
+      "\\barms?\\b|bracket|\\btie\\b|staple|razor|concertina"
+    ]
+  },
+  "fit.loopcap": {
+    "patterns": [
+      "loop cap",
+      "eye ?top",
+      "line (post )?(cap|top)"
+    ]
+  },
+  "fit.domecap": {
+    "patterns": [
+      "dome cap",
+      "post cap",
+      "acorn cap",
+      "terminal (post )?cap"
+    ],
+    "exclude": [
+      "loop|eye ?top|line (post )?cap"
+    ]
+  },
+  "fit.railend": {
+    "patterns": [
+      "rail end",
+      "brace end",
+      "end cup"
+    ]
+  },
+  "fit.braceband": {
+    "patterns": [
+      "brace band"
+    ]
+  },
+  "fit.tband": {
+    "patterns": [
+      "tension band"
+    ]
+  },
+  "fit.tbarft": {
+    "per": "ft",
+    "patterns": [
+      "tension bar",
+      "stretcher bar"
+    ],
+    "exclude": [
+      "band"
+    ],
+    "divideBy": 6,
+    "_note": "bar length is read from the text (5'-10\", 6'); 6' is assumed if it isn't given"
+  },
+  "fit.bolt": {
+    "patterns": [
+      "carriage bolt",
+      "\\bbolt\\b.*5/16"
+    ]
+  },
+  "fit.truss": {
+    "patterns": [
+      "truss rod",
+      "truss tightener"
+    ]
+  },
+  "fit.sleeve": {
+    "patterns": [
+      "(top )?rail sleeve",
+      "swedge sleeve",
+      "\\bsleeve\\b.*1[\\s-]*5/8"
+    ]
+  },
+  "fit.clamp": {
+    "patterns": [
+      "(line rail|boulevard|blvd|rail) clamp",
+      "\\bclamp\\b.*1[\\s-]*5/8.*2[\\s-]*3/8"
+    ]
+  },
+  "fit.tie": {
+    "patterns": [
+      "tie wire",
+      "fence ties?\\b",
+      "\\b(alum(inum)?|galv) ties?\\b",
+      "\\bties?\\b.*\\b(alum|galv|9\\s*ga)"
+    ],
+    "exclude": [
+      "hog|tension wire"
+    ]
+  },
+  "fit.hog": {
+    "patterns": [
+      "hog ring"
+    ]
+  },
+  "fit.barbarm": {
+    "patterns": [
+      "barb(ed)?( wire)? arm"
+    ]
+  },
+  "gate.walk.4": {
+    "patterns": [
+      "((walk|single|man)\\s*gate|gate,?\\s*(walk|single)).*[x×]\\s*4\\s*(?:'|ft|feet)?(?:\\s*(?:h\\b|high|tall))?(?![\\d'\"]|\\s*(?:w\\b|wide))",
+      "((walk|single|man)\\s*gate|gate,?\\s*(walk|single)).*\\b4\\s*(?:'|ft|feet)?\\s*(?:h\\b|high|tall)",
+      "[x×]\\s*4\\s*(?:'|ft|feet)(?:\\s*(?:h\\b|high|tall))?\\s+((walk|single|man)\\s*gate|gate,?\\s*(walk|single))"
+    ],
+    "exclude": [
+      "double|\\bdbl\\b|drive|cantilever|slide|rolling"
+    ],
+    "_note": "walk gates are quoted width x height; the height is the number after the x (or the one marked H)"
+  },
+  "gate.walk.5": {
+    "patterns": [
+      "((walk|single|man)\\s*gate|gate,?\\s*(walk|single)).*[x×]\\s*5\\s*(?:'|ft|feet)?(?:\\s*(?:h\\b|high|tall))?(?![\\d'\"]|\\s*(?:w\\b|wide))",
+      "((walk|single|man)\\s*gate|gate,?\\s*(walk|single)).*\\b5\\s*(?:'|ft|feet)?\\s*(?:h\\b|high|tall)",
+      "[x×]\\s*5\\s*(?:'|ft|feet)(?:\\s*(?:h\\b|high|tall))?\\s+((walk|single|man)\\s*gate|gate,?\\s*(walk|single))"
+    ],
+    "exclude": [
+      "double|\\bdbl\\b|drive|cantilever|slide|rolling"
+    ],
+    "_note": "walk gates are quoted width x height; the height is the number after the x (or the one marked H)"
+  },
+  "gate.walk.6": {
+    "patterns": [
+      "((walk|single|man)\\s*gate|gate,?\\s*(walk|single)).*[x×]\\s*6\\s*(?:'|ft|feet)?(?:\\s*(?:h\\b|high|tall))?(?![\\d'\"]|\\s*(?:w\\b|wide))",
+      "((walk|single|man)\\s*gate|gate,?\\s*(walk|single)).*\\b6\\s*(?:'|ft|feet)?\\s*(?:h\\b|high|tall)",
+      "[x×]\\s*6\\s*(?:'|ft|feet)(?:\\s*(?:h\\b|high|tall))?\\s+((walk|single|man)\\s*gate|gate,?\\s*(walk|single))"
+    ],
+    "exclude": [
+      "double|\\bdbl\\b|drive|cantilever|slide|rolling"
+    ],
+    "_note": "walk gates are quoted width x height; the height is the number after the x (or the one marked H)"
+  },
+  "gate.walk.7": {
+    "patterns": [
+      "((walk|single|man)\\s*gate|gate,?\\s*(walk|single)).*[x×]\\s*7\\s*(?:'|ft|feet)?(?:\\s*(?:h\\b|high|tall))?(?![\\d'\"]|\\s*(?:w\\b|wide))",
+      "((walk|single|man)\\s*gate|gate,?\\s*(walk|single)).*\\b7\\s*(?:'|ft|feet)?\\s*(?:h\\b|high|tall)",
+      "[x×]\\s*7\\s*(?:'|ft|feet)(?:\\s*(?:h\\b|high|tall))?\\s+((walk|single|man)\\s*gate|gate,?\\s*(walk|single))"
+    ],
+    "exclude": [
+      "double|\\bdbl\\b|drive|cantilever|slide|rolling"
+    ],
+    "_note": "walk gates are quoted width x height; the height is the number after the x (or the one marked H)"
+  },
+  "gate.dbl.12": {
+    "patterns": [
+      "(double|\\bdbl\\b|\\bdrive\\b|pair).*gate.*\\b12\\s*(?:'|ft|feet)?\\s*(?:w\\b|wide|opening|[x×])",
+      "(double|\\bdbl\\b|\\bdrive\\b|pair).*gate.*\\b12\\s*(?:'|ft|feet)?\\s*(?:w\\b|wide|opening)"
+    ],
+    "exclude": [
+      "cantilever|slide|rolling|walk"
+    ]
+  },
+  "gate.dbl.16": {
+    "patterns": [
+      "(double|\\bdbl\\b|\\bdrive\\b|pair).*gate.*\\b16\\s*(?:'|ft|feet)?\\s*(?:w\\b|wide|opening|[x×])",
+      "(double|\\bdbl\\b|\\bdrive\\b|pair).*gate.*\\b16\\s*(?:'|ft|feet)?\\s*(?:w\\b|wide|opening)"
+    ],
+    "exclude": [
+      "cantilever|slide|rolling|walk"
+    ]
+  },
+  "gate.dbl.20": {
+    "patterns": [
+      "(double|\\bdbl\\b|\\bdrive\\b|pair).*gate.*\\b20\\s*(?:'|ft|feet)?\\s*(?:w\\b|wide|opening|[x×])",
+      "(double|\\bdbl\\b|\\bdrive\\b|pair).*gate.*\\b20\\s*(?:'|ft|feet)?\\s*(?:w\\b|wide|opening)"
+    ],
+    "exclude": [
+      "cantilever|slide|rolling|walk"
+    ]
+  },
+  "gate.dbl.24": {
+    "patterns": [
+      "(double|\\bdbl\\b|\\bdrive\\b|pair).*gate.*\\b24\\s*(?:'|ft|feet)?\\s*(?:w\\b|wide|opening|[x×])",
+      "(double|\\bdbl\\b|\\bdrive\\b|pair).*gate.*\\b24\\s*(?:'|ft|feet)?\\s*(?:w\\b|wide|opening)"
+    ],
+    "exclude": [
+      "cantilever|slide|rolling|walk"
+    ]
+  },
+  "gate.hingepr": {
+    "patterns": [
+      "hinge (set|pair|kit)",
+      "male.*female hinge",
+      "hinge.*male.*female",
+      "\\bhinges?\\b.*\\b(pr|pair|set)\\b"
+    ]
+  },
+  "gate.latch": {
+    "patterns": [
+      "fork latch",
+      "gate latch",
+      "\\blatch\\b"
+    ],
+    "exclude": [
+      "industrial|drop rod|plunger"
+    ]
+  },
+  "gate.droprod": {
+    "patterns": [
+      "drop rod",
+      "cane bolt",
+      "plunger rod"
+    ]
+  },
+  "concrete.80": {
+    "patterns": [
+      "\\b80\\s*-?\\s*(lb|lbs|#)(?!\\w).*(concrete|\\bmix\\b|quikrete|quickrete|sakrete|post ?mix|fast[- ]?set(ting)?|high[- ]?strength)",
+      "(concrete|\\bmix\\b|quikrete|quickrete|sakrete|post ?mix|fast[- ]?set(ting)?|high[- ]?strength).*\\b80\\s*-?\\s*(lb|lbs|#)(?!\\w)"
+    ],
+    "exclude": [
+      "pallet|\\bplt\\b"
+    ]
+  },
+  "concrete.60": {
+    "patterns": [
+      "\\b60\\s*-?\\s*(lb|lbs|#)(?!\\w).*(concrete|\\bmix\\b|quikrete|quickrete|sakrete|post ?mix|fast[- ]?set(ting)?|high[- ]?strength)",
+      "(concrete|\\bmix\\b|quikrete|quickrete|sakrete|post ?mix|fast[- ]?set(ting)?|high[- ]?strength).*\\b60\\s*-?\\s*(lb|lbs|#)(?!\\w)"
+    ],
+    "exclude": [
+      "pallet|\\bplt\\b"
+    ]
+  }
 }

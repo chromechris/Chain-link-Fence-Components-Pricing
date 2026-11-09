@@ -174,7 +174,14 @@ Claude searches current fence-supply and retail listings for the region, prices 
 node update-feed.js quote my-supplier-quote.csv --push
 ```
 
-Export or type your supply house's quote as a CSV with a description (or SKU) column and a price column, e.g. `quote-sample.csv`. `quote-map.json` maps each feed key to a regex on the description (or a list of SKUs) and a `divideBy` for unit conversion (21' pipe stick to per-foot, a 6' tension bar to per-foot). Edit the patterns to match your supplier's wording; keys with no matching line keep their previous value and are listed in `SOURCES.md`. `--as-of 2026-09-15` sets the quote date; `--dry-run` previews.
+Export or type your supply house's quote as a CSV with a description (or SKU) column and a price column, e.g. `quote-sample.csv` (simple) or `quote-sample-supplyhouse.csv` (typical supply-house export with abbreviations, a UOM column and list/net prices). The run prints which columns it used.
+
+- **Price column:** net / your price / unit price is preferred; extended and total columns are never used; list price only if nothing else exists.
+- **Units:** a `UOM` column of `C` (per 100) or `M` (per 1000) is converted to each; `FT`/`LF` is taken as per foot; "BAG OF 100" or "1000/BX" in the description divides by the pack.
+- **Lengths:** pipe, tension wire, barbed wire and tension bars are converted to per foot from the length in the description (21' or 24' stick, 1320' roll, 5'-10" bar), falling back to 21' sticks and 6' bars. Fabric is converted to a 50' roll (100' rolls are halved).
+- **`quote-map.json`:** per key, `patterns` (regexes on the description; the first matching line wins), `exclude` (rejects look-alikes such as vinyl-coated fabric for the galvanized roll keys, or barb arms for barbed wire), `skus` (exact part numbers), `per` (`each`, `ft` or `roll50`) and `divideBy` / `multiplyBy`. Markup, tax and the fabric multipliers are `manual` and never taken from a quote.
+
+Edit the patterns to match your supplier's wording; keys with no matching line keep their previous value and are listed in `SOURCES.md`. A value more than 3x off the current one is held as a probable unit mistake (`--allow-big-moves` accepts it). `--as-of 2026-09-15` sets the quote date; `--dry-run` previews.
 
 ### 3. Manual
 

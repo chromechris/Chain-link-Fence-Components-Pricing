@@ -127,7 +127,7 @@ function publish(msg) {
 }
 
 // ---------- mode: sync ----------
-function cmdSync() { const keys = readJSON(KEYS); const feed = loadFeed(); writeFeed(feed, keys); console.log("feed.csv and README regenerated from feed.json (" + flatten(feed).length + " keys)."); }
+function cmdSync(a) { const keys = readJSON(KEYS); const feed = loadFeed(); if (a && a.flags["dry-run"]) { validate(feed, keys); console.log("feed.json is valid (" + flatten(feed).length + " keys); --dry-run, nothing written."); return; } writeFeed(feed, keys); console.log("feed.csv and README regenerated from feed.json (" + flatten(feed).length + " keys)."); }
 
 // ---------- mode: set ----------
 function cmdSet(a) {
@@ -142,27 +142,68 @@ function cmdSet(a) {
 }
 
 // ---------- mode: quote (supplier CSV) ----------
+// Converts one quote line's price to the feed unit. rule.per:
+//   "each"   (default) per piece: UOM C = per 100, M = per 1000, and "BAG OF 100" / "1000/BX" in the text divide by the pack.
+//   "ft"     per lineal foot: UOM FT/LF (or "per ft" in the text) is used as is; otherwise the price is per stick / bar / coil
+//            and is divided by the length in the text (the first length given: 21', 1320 ft, 5'-10"), else by rule.divideBy.
+//   "roll50" per 50' fabric roll: a 100' roll is halved; a per-foot price is multiplied by 50.
+// rule.multiplyBy still applies last.
+const PACK_RE = /(?:bag|bg|box|bx|pk|pack|carton|ctn|case|pail)\s*(?:of\s*)?(\d[\d,]*)|(\d[\d,]*)\s*(?:\/|per\s+)\s*(?:bag|bg|box|bx|pk|pack|carton|ctn|case|pail)\b|(\d[\d,]*)\s*(?:pcs|pc|ct|count)\b/i;
+const LEN_RE = /(\d+(?:\.\d+)?)\s*(?:'|ft\b|feet\b|lf\b)(?:\s*-?\s*(\d+(?:\.\d+)?)\s*(?:"|in\b))?/gi;
+function quoteUnitPrice(it, rule) {
+  const per = rule.per || "each", u = it.uom.toLowerCase().replace(/[^a-z]/g, ""), steps = [];
+  let v = it.price;
+  const perFoot = ["ft", "lf", "lft", "feet", "foot"].includes(u) || /\b(per|\/)\s*(ft|lf|foot)\b/i.test(it.desc);
+  const num = (s) => parseFloat(String(s).replace(/,/g, ""));
+  if (u === "c") { v /= 100; steps.push("UOM C ÷ 100"); }
+  else if (u === "m") { v /= 1000; steps.push("UOM M ÷ 1000"); }
+  if (per === "ft") {
+    if (!perFoot) {
+      const lens = [...it.desc.matchAll(LEN_RE)].map((m) => num(m[1]) + (m[2] ? num(m[2]) / 12 : 0)).filter((x) => x > 0);
+      const len = lens.length ? lens[0] : rule.divideBy;
+      if (!len) return { error: "price is not per foot and the line gives no length" };
+      v /= len; steps.push(`÷ ${+len.toFixed(3)} ft${lens.length ? "" : " (assumed)"}`);
+    }
+  } else if (per === "roll50") {
+    if (perFoot) { v *= 50; steps.push("per ft × 50"); }
+    else { const m = it.desc.match(/[x×]\s*(\d+)\s*(?:'|ft\b|feet\b)/i), len = m ? num(m[1]) : 50; if (len !== 50) { v = (v / len) * 50; steps.push(`${len}' roll → 50'`); } }
+  } else {
+    const m = u === "c" || u === "m" ? null : it.desc.match(PACK_RE), pack = m ? num(m[1] || m[2] || m[3]) : 0;
+    if (pack > 1) { v /= pack; steps.push(`pack of ${pack}`); }
+    else if (rule.divideBy) { v /= rule.divideBy; steps.push(`÷ ${rule.divideBy}`); }
+  }
+  if (rule.multiplyBy) { v *= rule.multiplyBy; steps.push(`× ${rule.multiplyBy}`); }
+  return { value: v, steps };
+}
+
 function cmdQuote(a) {
   const file = a._[1]; if (!file) throw new Error("usage: update-feed.js quote <supplier.csv>");
   const keys = readJSON(KEYS), feed = loadFeed(), qmap = readJSON(QMAP);
   const rows = parseCSV(fs.readFileSync(file, "utf8"));
   const head = rows[0].map((h) => h.trim().toLowerCase());
-  const col = (names) => { for (const n of names) { const i = head.findIndex((h) => h === n || h.includes(n)); if (i >= 0) return i; } return -1; };
-  const iDesc = col(["description", "item", "product", "name"]), iSku = col(["sku", "part", "item #", "item no", "code"]), iPrice = col(["unit price", "price", "each", "cost", "rate"]);
+  const col = (names, skip) => { for (const n of names) { const i = head.findIndex((h) => (h === n || h.includes(n)) && !(skip && skip.test(h))); if (i >= 0) return i; } return -1; };
+  const iDesc = col(["description", "desc", "item", "product", "name"]), iSku = col(["sku", "part", "item #", "item no", "code"]);
+  // Prefer the contractor's net price; never an extended / total column; list price only as a last resort.
+  const iPrice = [col(["net price", "your price", "sell price", "net", "unit price", "each", "price", "cost", "rate"], /ext|total|amount|list/), col(["list price", "price"], /ext|total|amount/)].find((i) => i >= 0) ?? -1;
+  const iUom = head.findIndex((h) => ["uom", "u/m", "um", "unit", "units", "unit of measure", "per"].includes(h));
   if (iDesc < 0 && iSku < 0) throw new Error("quote CSV needs a description/item or sku/part column; found: " + head.join(", "));
   if (iPrice < 0) throw new Error("quote CSV needs a price column; found: " + head.join(", "));
-  const items = rows.slice(1).map((r) => ({ desc: iDesc >= 0 ? r[iDesc] || "" : "", sku: iSku >= 0 ? r[iSku] || "" : "", price: money(r[iPrice]) })).filter((x) => isFinite(x.price));
-  const changes = {}, unresolved = [];
+  console.log(`Columns: description="${head[iDesc] ?? "-"}", sku="${head[iSku] ?? "-"}", price="${head[iPrice]}", uom="${head[iUom] ?? "-"}"`);
+  const items = rows.slice(1).map((r) => ({ desc: iDesc >= 0 ? r[iDesc] || "" : "", sku: iSku >= 0 ? r[iSku] || "" : "", uom: iUom >= 0 ? (r[iUom] || "").trim() : "", price: money(r[iPrice]) })).filter((x) => isFinite(x.price));
+  const changes = {}, unresolved = [], manual = [];
   Object.keys(keys).forEach((k) => {
     const rule = qmap[k]; if (!rule) { unresolved.push({ key: k, why: "no rule in quote-map.json" }); return; }
-    const pats = (rule.patterns || []).map((p) => new RegExp(p, "i")), skus = (rule.skus || []).map((s) => s.toLowerCase());
-    const hit = items.find((it) => skus.includes(it.sku.toLowerCase()) || pats.some((re) => re.test(it.desc)));
+    if (rule.manual) { manual.push(k); return; }
+    const pats = (rule.patterns || []).map((p) => new RegExp(p, "i")), skus = (rule.skus || []).map((s) => s.toLowerCase()), excl = (rule.exclude || []).map((p) => new RegExp(p, "i"));
+    const hit = items.find((it) => skus.includes(it.sku.toLowerCase()) || (pats.some((re) => re.test(it.desc)) && !excl.some((re) => re.test(it.desc))));
     if (!hit) { unresolved.push({ key: k, why: "no matching line in " + path.basename(file) }); return; }
-    let v = hit.price; if (rule.divideBy) v /= rule.divideBy; if (rule.multiplyBy) v *= rule.multiplyBy;
-    const old = getPath(feed, k);
-    if (!a.flags["allow-big-moves"] && old > 0 && (v > old * 3 || v < old / 3)) { unresolved.push({ key: k, why: `held: ${old} -> ${fmtNum(v)} moves more than 3x — matched "${hit.desc}"; check the unit / divideBy in quote-map.json or re-run with --allow-big-moves` }); return; }
-    changes[k] = { value: v, source: path.basename(file), note: `${hit.sku ? hit.sku + " " : ""}${hit.desc}`.trim() + (rule.divideBy ? ` ÷ ${rule.divideBy}` : "") };
+    const n = quoteUnitPrice(hit, rule);
+    if (n.error) { unresolved.push({ key: k, why: `${n.error} — matched "${hit.desc}"` }); return; }
+    const v = n.value, old = getPath(feed, k);
+    if (!a.flags["allow-big-moves"] && old > 0 && (v > old * 3 || v < old / 3)) { unresolved.push({ key: k, why: `held: ${old} -> ${fmtNum(v)} moves more than 3x — matched "${hit.desc}" (${n.steps.join(", ") || "no conversion"}); check the rule in quote-map.json or re-run with --allow-big-moves` }); return; }
+    changes[k] = { value: v, source: path.basename(file), note: `${hit.sku ? hit.sku + " " : ""}${hit.desc}`.trim() + ` @ ${hit.price}${hit.uom ? "/" + hit.uom : ""}` + (n.steps.length ? ` (${n.steps.join(", ")})` : "") };
   });
+  if (manual.length) console.log(`  not priced from quotes (set by hand): ${manual.join(", ")}`);
   const { applied, skipped } = applyChanges(feed, keys, changes, path.basename(file));
   feed.asOf = a.flags["as-of"] || today(); if (a.flags.region) feed.region = a.flags.region;
   feed.source = `Supplier quote ${path.basename(file)} (${applied.length} keys); unmatched keys keep their previous value.`;
@@ -243,7 +284,7 @@ async function cmdResearch(a) {
     if (cmd === "research") await cmdResearch(a);
     else if (cmd === "quote") cmdQuote(a);
     else if (cmd === "set") cmdSet(a);
-    else if (cmd === "sync") cmdSync();
+    else if (cmd === "sync") cmdSync(a);
     else if (cmd === "publish") publish(`Price feed update as of ${loadFeed().asOf}`);
     else { console.log(fs.readFileSync(__filename, "utf8").split("\n").slice(1, 17).map((l) => l.replace(/^\/\/ ?/, "")).join("\n")); process.exit(cmd ? 1 : 0); }
   } catch (e) { console.error("\nERROR: " + (e && e.message ? e.message : e)); process.exit(1); }
